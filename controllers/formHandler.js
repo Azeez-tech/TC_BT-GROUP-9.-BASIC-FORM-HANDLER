@@ -9,57 +9,64 @@ const __dirname = dirname(__filename);
 const filePath = path.join(__dirname, "../data/form.txt");
 
 const formHandler = (req, res, next) => {
-  const { firstName, lastName, age, userName, email, password } = req.body;
+  try {
+    const { firstName, lastName, age, userName, email, password } = req.body;
 
-  if (!firstName || !lastName || !age || !userName || !email || !password) {
-    return res.status(400).json({
-      status: false,
-      message: "All fields are required",
-    });
-  }
-
-  // Read existing users
-  fs.readFile(filePath, "utf-8", (readErr, data) => {
-    let users = [];
-
-    if (!readErr && data) {
-      try {
-        users = JSON.parse(data);
-      } catch (parseErr) {
-        return res.status(500).json({
-          status: false,
-          message: "Error parsing users data",
-        });
-      }
-    }
-
-    // Check if user already exists
-    const userExist = users.find((user) => user.email === email);
-    if (userExist) {
+    if (!firstName || !lastName || !age || !userName || !email || !password) {
       return res.status(400).json({
         status: false,
-        message: "User already exists",
+        message: "All fields are required",
       });
     }
 
-    // Add new user
-    users.push({ firstName, lastName, age, userName, email, password });
+    // Read existing users
+    fs.readFile(filePath, "utf-8", (error, data) => {
+      let users = [];
 
-    // Write updated users array back to the file
-    fs.writeFile(filePath, JSON.stringify(users, null, 2), (writeErr) => {
-      if (writeErr) {
-        return res.status(500).json({
+      if (!error && data) {
+        try {
+          users = JSON.parse(data);
+        } catch (err) {
+          return res.status(500).json({
+            status: false,
+            message: "Error parsing users data",
+          });
+        }
+      }
+
+      // Check if user already exists
+      const userExist = users.find((user) => user.email === email);
+      if (userExist) {
+        return res.status(400).json({
           status: false,
-          message: "Failed to write to file",
+          message: "User already exists",
         });
       }
 
-      res.status(201).json({
-        status: "Success",
-        message: "User form accepted",
+      // Add new user
+      users.push({ firstName, lastName, age, userName, email, password });
+
+      // Write updated users array back to the file
+      fs.writeFile(filePath, JSON.stringify(users), (error) => {
+        if (error) {
+          return res.status(500).json({
+            status: false,
+            message: "Failed to write to file",
+          });
+        }
+
+        res.status(201).json({
+          status: "Success",
+          message: "User form accepted",
+        });
       });
     });
-  });
+  } catch (err) {
+    res.status(500).json({
+      status: false,
+      message: "Server error",
+    });
+  }
 };
 
 export default formHandler;

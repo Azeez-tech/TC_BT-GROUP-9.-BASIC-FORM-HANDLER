@@ -1,10 +1,1 @@
-[
-  {
-    "firstName": "AZ",
-    "lastName": "Muh",
-    "age": 30,
-    "userName": "Ola",
-    "email": "azford@gmail.com",
-    "password": "password"
-  }
-]
+[{"firstName":"AZ","lastName":"Muh","age":30,"userName":"Ola","email":"azford@gmail.com","password":"password"},{"firstName":"Azo","lastName":"Muha","age":35,"userName":"Olaa","email":"ola@gmail.com","password":"password"}]
