@@ -9,6 +9,12 @@ app.use(express.json());
 
 app.use("/api/v1", formRouter);
 
+// error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: "Something went wrong!", error: err.message });
+});
+
 app.listen(process.env.PORT, () => {
   console.log(`Server is listening on http://localhost:${process.env.PORT}`);
 });

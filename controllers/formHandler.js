@@ -8,6 +8,12 @@ const __dirname = dirname(__filename);
 
 const filePath = path.join(__dirname, "../data/form.txt");
 
+// Simple email validation function
+const isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
 const formHandler = (req, res, next) => {
   const { firstName, lastName, age, userName, email, password } = req.body;
 
@@ -15,6 +21,14 @@ const formHandler = (req, res, next) => {
     return res.status(400).json({
       status: false,
       message: "All fields are required",
+    });
+  }
+
+  // Validate email format
+  if (!isValidEmail(email)) {
+    return res.status(400).json({
+      status: false,
+      message: "Invalid email format",
     });
   }
 
