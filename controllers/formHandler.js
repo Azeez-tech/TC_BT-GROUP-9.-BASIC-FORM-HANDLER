@@ -8,6 +8,12 @@ const __dirname = dirname(__filename);
 
 const filePath = path.join(__dirname, "../data/form.txt");
 
+// Simple email validation function
+const isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
 const formHandler = (req, res, next) => {
   try {
     const { firstName, lastName, age, userName, email, password } = req.body;
