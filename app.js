@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import formRouter from "./routes/form.js";
+import { notFound } from "./routes/notFound.js";
 
 // Helps to access environment variables
 dotenv.config();
@@ -10,6 +11,9 @@ app.use(express.json());
 
 // route middleware
 app.use("/api/v1", formRouter);
+
+// catches all routes that we did not defined
+app.use(notFound);
 
 // error handling middleware
 app.use((err, req, res, next) => {
